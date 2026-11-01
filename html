@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Magia do Natal - Frases, Cartões e Surpresas</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Mountains+of+Christmas:wght@700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        christmasRed: '#b91c1c',
+                        christmasDarkRed: '#7f1d1d',
+                        christmasGreen: '#14532d',
+                        christmasGold: '#fbbf24',
+                        christmasLightGold: '#fef3c7'
+                    },
+                    fontFamily: {
+                        christmas: ['"Mountains of Christmas"', 'cursive'],
+                        sans: ['Poppins', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Efeito de Neve */
+        .snowflake {
+            position: fixed;
+            top: -10px;
+            background: #ffffff;
+            border-radius: 50%;
+            pointer-events: none;
+            animation: fall linear infinite;
+            opacity: 0.8;
+            z-index: 50;
+        }
+        @keyframes fall {
+            0% {
+                transform: translateY(-10px) translateX(0);
+            }
+            50% {
+                transform: translateY(50vh) translateX(20px);
+            }
+            100% {
+                transform: translateY(105vh) translateX(-20px);
+            }
+        }
+        /* Brilho Dourado */
+        .gold-glow {
+            text-shadow: 0 0 15px rgba(251, 191, 36, 0.6);
+        }
+        /* Glassmorphism */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-christmasDarkRed via-christmasRed to-christmasGreen min-h-screen font-sans text-gray-800 overflow-x-hidden relative">
+
+    <!-- Container de Neve -->
+    <div id="snow-container"></div>
+
+    <!-- TELA DE CAPA (HOME) -->
+    <div id="screen-cover" class="min-h-screen flex flex-col items-center justify-center p-4 sm:p-6 transition-all duration-700 relative z-10">
+        <div class="text-center max-w-2xl mx-auto space-y-6">
+            <!-- Ícone/Logo Festiva -->
+            <div class="inline-flex items-center justify-center w-24 h-24 rounded-full bg-christmasGold text-christmasDarkRed shadow-2xl animate-bounce mb-2 border-4 border-white">
+                <i class="fa-solid fa-gifts text-4xl"></i>
+            </div>
+            
+            <span class="bg-christmasGold/20 text-christmasGold border border-christmasGold/40 text-xs sm:text-sm font-semibold px-4 py-1.5 rounded-full uppercase tracking-widest inline-block">
+                ✨ Especial de Fim de Ano ✨
+            </span>
+            
+            <h1 class="font-christmas text-5xl sm:text-7xl text-christmasGold gold-glow leading-tight">
+                Magia do Natal
+            </h1>
+            
+            <p class="text-white/90 text-sm sm:text-lg font-light max-w-lg mx-auto">
+                Compartilhe o amor, espalhe esperança e crie cartões inesquecíveis para quem você mais ama neste Natal.
+            </p>
+
+            <!-- Botões Interativos da Capa -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 max-w-md mx-auto">
+                <button onclick="navigateTo('screen-phrases')" class="group relative flex items-center justify-center gap-3 px-6 py-4 bg-christmasGold hover:bg-amber-400 text-christmasDarkRed font-bold rounded-2xl shadow-xl transform transition hover:-translate-y-1 active:translate-y-0">
+                    <i class="fa-solid fa-quote-left text-xl group-hover:rotate-12 transition-transform"></i>
+                    <span>Ver Frases</span>
+                    <i class="fa-solid fa-arrow-right ml-auto text-sm opacity-60"></i>
+                </button>
+
+                <button onclick="navigateTo('screen-card-maker')" class="group relative flex items-center justify-center gap-3 px-6 py-4 bg-white hover:bg-gray-100 text-christmasGreen font-bold rounded-2xl shadow-xl transform transition hover:-translate-y-1 active:translate-y-0">
+                    <i class="fa-solid fa-wand-magic-sparkles text-xl group-hover:rotate-12 transition-transform"></i>
+                    <span>Criar Cartão</span>
+                    <i class="fa-solid fa-arrow-right ml-auto text-sm opacity-60"></i>
+                </button>
+
+                <button onclick="navigateTo('screen-surprise')" class="group relative flex items-center justify-center gap-3 px-6 py-4 bg-emerald-700 hover:bg-emerald-600 text-white font-bold rounded-2xl shadow-xl transform transition hover:-translate-y-1 active:translate-y-0 border border-emerald-500">
+                    <i class="fa-solid fa-sleigh text-xl group-hover:rotate-12 transition-transform text-christmasGold"></i>
+                    <span>Surpresa do Papai Noel</span>
+                    <i class="fa-solid fa-arrow-right ml-auto text-sm opacity-60"></i>
+                </button>
+
+                <button onclick="openModal('creditsModal')" class="group relative flex items-center justify-center gap-3 px-6 py-4 bg-red-900/80 hover:bg-red-900 text-white/90 hover:text-white font-semibold rounded-2xl shadow-xl backdrop-blur border border-red-700 transform transition hover:-translate-y-1">
+                    <i class="fa-solid fa-star text-christmasGold"></i>
+                    <span>Mensagem Especial</span>
+                </button>
+            </div>
+        </div>
+        
+        <footer class="absolute bottom-4 text-xs text-white/60 tracking-wider">
+            Feito com ❤️ para celebrar o Natal
+        </footer>
+    </div>
+
+    <!-- TELA 1: VER FRASES -->
+    <div id="screen-phrases" class="hidden min-h-screen flex flex-col p-4 sm:p-8 relative z-10 max-w-4xl mx-auto">
+        <!-- Barra Superior -->
+        <div class="flex items-center justify-between mb-8 bg-black/20 p-4 rounded-2xl backdrop-blur">
+            <button onclick="navigateTo('screen-cover')" class="flex items-center gap-2 text-white bg-white/10 hover:bg-white/20 px-4 py-2 rounded-xl transition">
+                <i class="fa-solid fa-arrow-left"></i> Voltar à Capa
+            </button>
+            <h2 class="font-christmas text-2xl sm:text-3xl text-christmasGold">Mural de Frases</h2>
+            <div class="w-24"></div>
+        </div>
+
+        <!-- Filtros de Categoria -->
+        <div class="flex flex-wrap gap-2 mb-6 justify-center">
+            <button onclick="filterPhrases('all', this)" class="category-btn active px-4 py-2 rounded-xl font-medium text-sm bg-christmasGold text-christmasDarkRed transition shadow">Todas</button>
+            <button onclick="filterPhrases('family', this)" class="category-btn px-4 py-2 rounded-xl font-medium text-sm bg-white/10 hover:bg-white/20 text-white transition">Família</button>
+            <button onclick="filterPhrases('friends', this)" class="category-btn px-4 py-2 rounded-xl font-medium text-sm bg-white/10 hover:bg-white/20 text-white transition">Amigos</button>
+            <button onclick="filterPhrases('romance', this)" class="category-btn px-4 py-2 rounded-xl font-medium text-sm bg-white/10 hover:bg-white/20 text-white transition">Romance</button>
+            <button onclick="filterPhrases('short', this)" class="category-btn px-4 py-2 rounded-xl font-medium text-sm bg-white/10 hover:bg-white/20 text-white transition">Curtas (Status)</button>
+        </div>
+
+        <!-- Lista de Frases -->
+        <div id="phrases-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4 pb-12">
+            <!-- Preenchido via JavaScript -->
+        </div>
+    </div>
+
+    <!-- TELA 2: CRIAR CARTÃO -->
+    <div id="screen-card-maker" class="hidden min-h-screen flex flex-col p-4 sm:p-8 relative z-10 max-w-4xl mx-auto">
+        <div class="flex items-center justify-between mb-8 bg-black/20 p-4 rounded-2xl backdrop-blur">
+            <button onclick="navigateTo('screen-cover')" class="flex items-center gap-2 text-white bg-white/10 hover:bg-white/20 px-4 py-2 rounded-xl transition">
+                <i class="fa-solid fa-arrow-left"></i> Voltar à Capa
+            </button>
+            <h2 class="font-christmas text-2xl sm:text-3xl text-christmasGold">Criador de Cartões</h2>
+            <div class="w-24"></div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+            <!-- Painel de Controles -->
+            <div class="glass-card p-6 rounded-3xl shadow-2xl space-y-4">
+                <h3 class="font-bold text-gray-800 text-lg flex items-center gap-2">
+                    <i class="fa-solid fa-sliders text-christmasRed"></i> Personalize seu Cartão
+                </h3>
+
+                <div>
+                    <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Para (Nome do Destinatário):</label>
+                    <input type="text" id="card-to" placeholder="Ex: Família Silva / Meu Amor" value="Querida Família" oninput="updateCardPreview()" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-christmasRed">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Mensagem:</label>
+                    <textarea id="card-message" rows="4" oninput="updateCardPreview()" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-christmasRed">Que a magia do Natal ilumine nosso lar com paz, união e muito amor. Boas Festas!</textarea>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">De (Seu Nome):</label>
+                    <input type="text" id="card-from" placeholder="Seu nome" value="Com carinho" oninput="updateCardPreview()" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-christmasRed">
+                </div>
+
+                <!-- Nova seção: Imagem / Adesivo de Natal -->
+                <div>
+                    <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Imagem / Adesivo Festivo:</label>
+                    <div class="grid grid-cols-5 gap-2 mb-2">
+                        <button type="button" onclick="setCardImage('🎄', this)" class="sticker-btn p-2 rounded-xl bg-gray-100 hover:bg-gray-200 text-2xl text-center border-2 border-christmasRed transition">🎄</button>
+                        <button type="button" onclick="setCardImage('🎅', this)" class="sticker-btn p-2 rounded-xl bg-gray-100 hover:bg-gray-200 text-2xl text-center border-2 border-transparent transition">🎅</button>
+                        <button type="button" onclick="setCardImage('🎁', this)" class="sticker-btn p-2 rounded-xl bg-gray-100 hover:bg-gray-200 text-2xl text-center border-2 border-transparent transition">🎁</button>
+                        <button type="button" onclick="setCardImage('⭐', this)" class="sticker-btn p-2 rounded-xl bg-gray-100 hover:bg-gray-200 text-2xl text-center border-2 border-transparent transition">⭐</button>
+                        <button type="button" onclick="setCardImage('⛄', this)" class="sticker-btn p-2 rounded-xl bg-gray-100 hover:bg-gray-200 text-2xl text-center border-2 border-transparent transition">⛄</button>
+                    </div>
+                    <div>
+                        <input type="text" id="card-custom-img" placeholder="Ou cole o link de uma imagem (URL)" oninput="updateCardPreview()" class="w-full px-3 py-2 text-xs rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-christmasRed">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Escolha o Tema Visual:</label>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                        <button type="button" onclick="setTheme('red', this)" class="theme-btn p-2.5 rounded-xl bg-christmasRed text-white text-xs font-bold border-2 border-christmasGold shadow">Clássico</button>
+                        <button type="button" onclick="setTheme('green', this)" class="theme-btn p-2.5 rounded-xl bg-christmasGreen text-white text-xs font-bold border-2 border-transparent">Floresta</button>
+                        <button type="button" onclick="setTheme('gold', this)" class="theme-btn p-2.5 rounded-xl bg-amber-500 text-gray-900 text-xs font-bold border-2 border-transparent">Luxo Dourado</button>
+                        <button type="button" onclick="setTheme('blue', this)" class="theme-btn p-2.5 rounded-xl bg-indigo-900 text-cyan-200 text-xs font-bold border-2 border-transparent">Noite Estelar</button>
+                        <button type="button" onclick="setTheme('silver', this)" class="theme-btn p-2.5 rounded-xl bg-slate-200 text-slate-800 text-xs font-bold border-2 border-transparent">Neve Alpina</button>
+                        <button type="button" onclick="setTheme('pink', this)" class="theme-btn p-2.5 rounded-xl bg-rose-500 text-white text-xs font-bold border-2 border-transparent">Rosa Natalino</button>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+                    <button onclick="shareCard('copy')" class="w-full py-3.5 bg-christmasRed hover:bg-red-800 text-white font-bold rounded-xl shadow-lg transition flex items-center justify-center gap-2 text-sm">
+                        <i class="fa-solid fa-copy"></i> Copiar Mensagem
+                    </button>
+                    <button onclick="shareCard('whatsapp')" class="w-full py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-lg transition flex items-center justify-center gap-2 text-sm">
+                        <i class="fa-brands fa-whatsapp text-lg"></i> Enviar WhatsApp
+                    </button>
+                </div>
+            </div>
+
+            <!-- Preview do Cartão -->
+            <div class="flex flex-col items-center justify-center">
+                <span class="text-xs uppercase tracking-widest text-white/80 mb-3 font-semibold">Pré-visualização ao vivo</span>
+                
+                <div id="card-preview-box" class="w-full max-w-sm rounded-3xl p-6 sm:p-8 shadow-2xl relative overflow-hidden transition-all duration-500 bg-christmasRed text-white border-4 border-christmasGold min-h-[400px] flex flex-col justify-between">
+                    <!-- Elementos decorativos de fundo / Imagem escolhida -->
+                    <div id="preview-img-container" class="absolute -right-6 -top-6 opacity-15 text-8xl sm:text-9xl pointer-events-none transition-all duration-300">🎄</div>
+                    
+                    <div class="relative z-10 text-center">
+                        <span class="text-christmasGold text-sm font-semibold tracking-widest uppercase">Feliz Natal</span>
+                        <h4 id="preview-to" class="font-christmas text-3xl mt-1 text-christmasGold gold-glow">Querida Família</h4>
+                    </div>
+
+                    <div class="relative z-10 my-4 text-center">
+                        <p id="preview-message" class="text-sm sm:text-base font-light italic leading-relaxed">
+                            "Que a magia do Natal ilumine nosso lar com paz, união e muito amor. Boas Festas!"
+                        </p>
+                    </div>
+
+                    <div class="relative z-10 text-right border-t border-white/20 pt-3">
+                        <span class="text-xs text-white/70 block">Com amor,</span>
+                        <span id="preview-from" class="font-semibold text-christmasGold">Com carinho</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TELA 3: SURPRESA DO PAPAI NOEL -->
+    <div id="screen-surprise" class="hidden min-h-screen flex flex-col p-4 sm:p-8 relative z-10 max-w-2xl mx-auto items-center justify-center text-center">
+        <div class="glass-card p-8 sm:p-12 rounded-3xl shadow-2xl space-y-6 w-full relative">
+            <button onclick="navigateTo('screen-cover')" class="absolute top-6 left-6 text-gray-500 hover:text-gray-800">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+
+            <div class="w-20 h-20 bg-christmasGold rounded-full flex items-center justify-center mx-auto text-christmasDarkRed text-3xl shadow-inner animate-pulse">
+                🎅
+            </div>
+
+            <h2 class="font-christmas text-4xl text-christmasRed">Mensagem Secreta do Papai Noel</h2>
+            
+            <div id="santa-box" class="bg-red-50 p-6 rounded-2xl border border-red-100 min-h-[120px] flex items-center justify-center">
+                <p id="santa-message" class="text-gray-700 italic text-base transition-all duration-300">
+                    "Clique no botão abaixo para receber sua mensagem mágica e o conselho do Papai Noel para este ano!"
+                </p>
+            </div>
+
+            <button onclick="generateSantaMessage()" class="px-8 py-4 bg-christmasGreen hover:bg-emerald-800 text-white font-bold rounded-2xl shadow-xl transition transform active:scale-95 inline-flex items-center gap-3 mx-auto">
+                <i class="fa-solid fa-wand-magic-sparkles text-christmasGold"></i> Revelar Mensagem do Noel
+            </button>
+
+            <div>
+                <button onclick="navigateTo('screen-cover')" class="text-sm font-semibold text-gray-500 hover:text-christmasRed transition">
+                    Voltar ao Início
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DE MENSAGEM ESPECIAL -->
+    <div id="creditsModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl relative text-center space-y-4 animate-in fade-in zoom-in duration-300">
+            <div class="w-16 h-16 bg-red-100 text-christmasRed rounded-full flex items-center justify-center mx-auto text-2xl">
+                🎄
+            </div>
+            <h3 class="font-christmas text-3xl text-christmasDarkRed">Espírito Natalino</h3>
+            <p class="text-gray-600 text-sm leading-relaxed">
+                O Natal não é apenas uma época do ano, mas um estado de espírito. É tempo de perdoar, abraçar quem está longe no coração e agradecer pelas pequenas alegrias diárias. Que este aplicativo leve um sorriso para o seu dia!
+            </p>
+            <button onclick="closeModal('creditsModal')" class="w-full py-3 bg-christmasRed text-white font-bold rounded-xl shadow hover:bg-red-800 transition">
+                Fechar & Continuar
+            </button>
+        </div>
+    </div>
+
+    <!-- Toast de Notificação -->
+    <div id="toast" class="fixed bottom-6 right-6 bg-gray-900 text-white px-6 py-3 rounded-2xl shadow-2xl transform translate-y-32 transition-all duration-300 z-50 flex items-center gap-3 border border-gray-800">
+        <i class="fa-solid fa-circle-check text-christmasGold text-lg"></i>
+        <span id="toast-message" class="text-sm font-medium">Copiado com sucesso!</span>
+    </div>
+
+    <!-- SCRIPT DA APLICAÇÃO -->
+    <script>
+        // Criação da Neve Dinâmica
+        function createSnow() {
+            const container = document.getElementById('snow-container');
+            const snowCount = 40;
+            for (let i = 0; i < snowCount; i++) {
+                const flake = document.createElement('div');
+                flake.classList.add('snowflake');
+                const size = Math.random() * 6 + 2 + 'px';
+                flake.style.width = size;
+                flake.style.height = size;
+                flake.style.left = Math.random() * 100 + 'vw';
+                flake.style.animationDuration = Math.random() * 5 + 5 + 's';
+                flake.style.animationDelay = Math.random() * 5 + 's';
+                container.appendChild(flake);
+            }
+        }
+        createSnow();
+
+        // Dados de Frases
+        const phrasesData = [
+            { category: 'family', text: 'Que o espírito de Natal renove em nossos corações a esperança, a união e a alegria. Que a nossa casa seja preenchida com o melhor presente de todos: a presença de quem amamos. Feliz Natal!' },
+            { category: 'family', text: 'Família reunida, mesa posta e corações aquecidos. Não há presente no mundo que pague a felicidade de estar com vocês nesta data.' },
+            { category: 'friends', text: 'Amizade verdadeira é o melhor presente que eu poderia ter ganho. Que o seu Natal seja iluminado, cheio de paz, sorrisos e muita comemoração. Boas Festas!' },
+            { category: 'friends', text: 'Para um amigo especial que torna o ano inteiro mais leve: desejo um Natal mágico e um Ano Novo repleto de conquistas!' },
+            { category: 'romance', text: 'O melhor presente debaixo da árvore de Natal é poder passar cada momento ao seu lado. Te amo. Feliz Natal!' },
+            { category: 'romance', text: 'Meu Natal é perfeito porque tenho você para segurar minha mão e aquecer meu coração. Boas Festas, meu amor!' },
+            { category: 'short', text: 'Que a luz do Natal brilhe em sua casa hoje e sempre! 🎄✨' },
+            { category: 'short', text: 'Amor, paz e união: que o Natal traga o melhor para sua vida! 🎁' },
+            { category: 'short', text: 'Boas Festas! Que a alegria invada o seu coração.' }
+        ];
+
+        // Navegação entre Telas
+        function navigateTo(screenId) {
+            const screens = ['screen-cover', 'screen-phrases', 'screen-card-maker', 'screen-surprise'];
+            screens.forEach(id => {
+                const el = document.getElementById(id);
+                if (id === screenId) {
+                    el.classList.remove('hidden');
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                } else {
+                    el.classList.add('hidden');
+                }
+            });
+
+            if(screenId === 'screen-phrases') {
+                const firstBtn = document.querySelector('.category-btn');
+                filterPhrases('all', firstBtn);
+            }
+        }
+
+        // Renderizar Frases com Filtro Ativo Robusto
+        function filterPhrases(category, btnElement) {
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.classList.remove('bg-christmasGold', 'text-christmasDarkRed');
+                btn.classList.add('bg-white/10', 'text-white');
+            });
+            if (btnElement) {
+                btnElement.classList.remove('bg-white/10', 'text-white');
+                btnElement.classList.add('bg-christmasGold', 'text-christmasDarkRed');
+            }
+
+            const grid = document.getElementById('phrases-grid');
+            grid.innerHTML = '';
+
+            const filtered = category === 'all' 
+                ? phrasesData 
+                : phrasesData.filter(p => p.category === category);
+
+            filtered.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'glass-card p-6 rounded-2xl shadow-xl flex flex-col justify-between border border-white/40 hover:scale-[1.01] transition-transform';
+                
+                // Escape string correctly for inline handler
+                const safeText = item.text.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+                
+                card.innerHTML = `
+                    <p class="text-gray-800 text-sm sm:text-base italic mb-4">"${item.text}"</p>
+                    <div class="flex items-center justify-between pt-3 border-t border-gray-100">
+                        <span class="text-xs uppercase font-semibold text-christmasRed tracking-wider">${item.category}</span>
+                        <button onclick="copyPhrase('${safeText}')" class="px-4 py-2 bg-christmasGreen hover:bg-emerald-800 text-white text-xs font-semibold rounded-xl transition flex items-center gap-1.5 shadow">
+                            <i class="fa-regular fa-copy"></i> Copiar
+                        </button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // Copiar Frase Direta com Fallback Seguro
+        function copyPhrase(text) {
+            // Decodes any potential &quot; if passed safely
+            const decodedText = text.replace(/&quot;/g, '"');
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(decodedText).then(() => {
+                    showToast('Frase copiada para a área de transferência!');
+                }).catch(() => {
+                    fallbackCopyText(decodedText);
+                });
+            } else {
+                fallbackCopyText(decodedText);
+            }
+        }
+
+        function fallbackCopyText(text) {
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            textarea.style.position = 'fixed';
+            document.body.appendChild(textarea);
+            textarea.focus();
+            textarea.select();
+            try {
+                document.execCommand('copy');
+                showToast('Frase copiada para a área de transferência!');
+            } catch (err) {
+                showToast('Não foi possível copiar automaticamente.');
+            }
+            document.body.removeChild(textarea);
+        }
+
+        // Gerenciamento do Criador de Cartões
+        let currentCardAsset = '🎄';
+
+        function setCardImage(asset, btn) {
+            currentCardAsset = asset;
+            document.getElementById('card-custom-img').value = ''; // limpa URL personalizada se escolher adesivo
+            
+            // Atualizar seleção visual dos botões de sticker
+            document.querySelectorAll('.sticker-btn').forEach(b => {
+                b.classList.remove('border-christmasRed', 'bg-red-50');
+                b.classList.add('border-transparent');
+            });
+            if (btn) {
+                btn.classList.remove('border-transparent');
+                btn.classList.add('border-christmasRed', 'bg-red-50');
+            }
+            updateCardPreview();
+        }
+
+        function updateCardPreview() {
+            const to = document.getElementById('card-to').value || 'Querido(a)';
+            const message = document.getElementById('card-message').value || 'Sua mensagem aqui...';
+            const from = document.getElementById('card-from').value || 'De alguém especial';
+            const customImgUrl = document.getElementById('card-custom-img').value.trim();
+
+            document.getElementById('preview-to').innerText = to;
+            document.getElementById('preview-message').innerText = `"${message}"`;
+            document.getElementById('preview-from').innerText = from;
+
+            const imgContainer = document.getElementById('preview-img-container');
+            if (customImgUrl) {
+                imgContainer.innerHTML = `<img src="${customImgUrl}" alt="Ícone" class="w-24 h-24 sm:w-32 sm:h-32 object-cover rounded-2xl shadow-lg border-2 border-white/40" onerror="this.onerror=null; this.src='https://placehold.co/128x128/b91c1c/fbbf24?text=🎄';">`;
+            } else {
+                imgContainer.innerText = currentCardAsset;
+            }
+        }
+
+        function setTheme(theme, btn) {
+            const previewBox = document.getElementById('card-preview-box');
+            
+            // Atualizar estilos dos botões de tema
+            document.querySelectorAll('.theme-btn').forEach(b => {
+                b.classList.remove('border-christmasGold', 'shadow');
+                b.classList.add('border-transparent');
+            });
+            if (btn) {
+                btn.classList.remove('border-transparent');
+                btn.classList.add('border-christmasGold', 'shadow');
+            }
+
+            // Remover classes de cor anteriores do card
+            previewBox.classList.remove(
+                'bg-christmasRed', 'bg-christmasGreen', 'bg-amber-100', 
+                'bg-indigo-950', 'bg-slate-100', 'bg-rose-600',
+                'text-white', 'text-gray-900', 'text-cyan-100', 'text-slate-900',
+                'border-christmasGold', 'border-amber-400', 'border-cyan-400', 'border-slate-400', 'border-rose-300'
+            );
+            
+            if(theme === 'red') {
+                previewBox.classList.add('bg-christmasRed', 'text-white', 'border-4', 'border-christmasGold');
+            } else if(theme === 'green') {
+                previewBox.classList.add('bg-christmasGreen', 'text-white', 'border-4', 'border-christmasGold');
+            } else if(theme === 'gold') {
+                previewBox.classList.add('bg-amber-100', 'text-gray-900', 'border-4', 'border-amber-400');
+            } else if(theme === 'blue') {
+                previewBox.classList.add('bg-indigo-950', 'text-cyan-100', 'border-4', 'border-cyan-400');
+            } else if(theme === 'silver') {
+                previewBox.classList.add('bg-slate-100', 'text-slate-900', 'border-4', 'border-slate-400');
+            } else if(theme === 'pink') {
+                previewBox.classList.add('bg-rose-600', 'text-white', 'border-4', 'border-rose-300');
+            }
+        }
+
+        function shareCard(method) {
+            const to = document.getElementById('card-to').value;
+            const message = document.getElementById('card-message').value;
+            const from = document.getElementById('card-from').value;
+            const customImgUrl = document.getElementById('card-custom-img').value.trim();
+            const symbol = customImgUrl ? `[Imagem: ${customImgUrl}]` : currentCardAsset;
+
+            const fullText = `🎄 *Cartão de Natal* ${symbol}\n\nPara: ${to}\n\n"${message}"\n\nCom carinho,\n${from}`;
+            
+            if (method === 'whatsapp') {
+                const encodedText = encodeURIComponent(fullText);
+                window.open(`https://api.whatsapp.com/send?text=${encodedText}`, '_blank');
+            } else {
+                fallbackCopyText(fullText);
+                showToast('Cartão copiado! Pronto para enviar!');
+            }
+        }
+
+        // Mensagens do Papai Noel
+        const santaMessages = [
+            "Ho Ho Ho! O Papai Noel viu que você se esforçou muito este ano. Que o seu Natal seja repleto de sorrisos sinceros e aconchego!",
+            "Ho Ho Ho! Meu trenó está carregado de energias positivas e alegrias especialmente reservadas para você e sua família!",
+            "Ho Ho Ho! Lembre-se de que o maior presente não está debaixo da árvore, mas sim nas pessoas que caminham ao nosso lado. Tenha um Natal mágico!",
+            "Ho Ho Ho! As renas já estão descansadas e eu vim trazer um lembrete: você é especial e merece uma noite inesquecível!"
+        ];
+
+        function generateSantaMessage() {
+            const randomIndex = Math.floor(Math.random() * santaMessages.length);
+            const msgEl = document.getElementById('santa-message');
+            msgEl.style.opacity = '0';
+            setTimeout(() => {
+                msgEl.innerText = santaMessages[randomIndex];
+                msgEl.style.opacity = '1';
+            }, 200);
+        }
+
+        // Modais
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.remove('hidden');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.add('hidden');
+        }
+
+        // Toast Notification Helper
+        let toastTimeout;
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toast-message');
+            toastMsg.innerText = message;
+            toast.classList.remove('translate-y-32');
+            
+            clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => {
+                toast.classList.add('translate-y-32');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
